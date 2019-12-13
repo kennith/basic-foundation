@@ -5,3 +5,4 @@ import { BasicFoundationStack } from '../lib/basic-foundation-stack';
 
 const app = new cdk.App();
 new BasicFoundationStack(app, 'BasicFoundationStack');
+new BasicFoundationStack(app, 'BasicFoundationStackXYZ');
