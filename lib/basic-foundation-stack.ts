@@ -1,5 +1,7 @@
 import cdk = require('@aws-cdk/core');
 import ec2 = require('@aws-cdk/aws-ec2');
+import dotenv = require('dotenv');
+
 import { SubnetType, InstanceType, InstanceClass, InstanceSize, AmazonLinuxImage } from '@aws-cdk/aws-ec2';
 
 export class BasicFoundationStack extends cdk.Stack {
@@ -11,12 +13,12 @@ export class BasicFoundationStack extends cdk.Stack {
       maxAzs: 1,
       subnetConfiguration: [
         {
-          name: 'PrivateSubnet',
+          name: 'private-subnet',
           subnetType: ec2.SubnetType.PRIVATE,
           cidrMask: 24,
         },
         {
-          name: 'PublicSubnet',
+          name: 'public-subnet',
           subnetType: SubnetType.PUBLIC,
           cidrMask: 24,
         }
@@ -26,7 +28,7 @@ export class BasicFoundationStack extends cdk.Stack {
     const publicSecurityGroup = new ec2.SecurityGroup(this, 'public-security-group', {
       vpc: vpc,
       allowAllOutbound: true,
-      securityGroupName: 'PublicSecurityGroup'
+      securityGroupName: 'public-security-group'
     })
 
     publicSecurityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(22), 'Allow SSH');
@@ -39,7 +41,7 @@ export class BasicFoundationStack extends cdk.Stack {
       }),
       keyName: 'kleung-juichi',
       vpcSubnets: {
-        subnetGroupName: 'PrivateSubnet', 
+        subnetGroupName: 'private-subnet', 
       }
     });
     
@@ -51,7 +53,7 @@ export class BasicFoundationStack extends cdk.Stack {
       }),
       keyName: 'kleung-juichi',
       vpcSubnets: {
-        subnetGroupName: 'PublicSubnet',
+        subnetGroupName: 'public-subnet',
       },
       securityGroup: publicSecurityGroup,
     })
